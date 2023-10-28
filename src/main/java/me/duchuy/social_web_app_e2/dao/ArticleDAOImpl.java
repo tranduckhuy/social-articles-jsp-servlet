@@ -46,7 +46,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
         List<Article> articleList = new ArrayList<>();
 
-        String query = "SELECT * FROM articles LIMIT " + (start - 1) + "," + total;
+        String query = "SELECT * FROM articles LIMIT " + total + " OFFSET " + (start - 1);
 
         try ( Connection conn = DBUtil.getConnection();  PreparedStatement ps = conn.prepareStatement(query)) {
             ResultSet rs = ps.executeQuery();
@@ -73,7 +73,6 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     public Article getArticlesById(String articleId) {
 
-        Article article = new Article();
 
         String query = "SELECT * FROM articles WHERE article_id = ?";
 
@@ -82,6 +81,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
+                Article article = new Article();
                 article.setArticle_Id(rs.getString("article_id"));
                 article.setTitle(rs.getString("title"));
                 article.setDescription(rs.getString("description"));
@@ -89,12 +89,12 @@ public class ArticleDAOImpl implements ArticleDAO {
                 article.setAuthor(rs.getString("author_name"));
                 article.setTimeCreated(rs.getTimestamp("time_created"));
                 article.setArticleImg(rs.getBinaryStream("articleImg"));
+                return article;
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(UserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return article;
+        return null;
     }
 
     public int getTotalNumArticle() {

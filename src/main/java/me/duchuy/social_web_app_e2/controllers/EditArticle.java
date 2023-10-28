@@ -2,8 +2,6 @@ package me.duchuy.social_web_app_e2.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -31,10 +29,12 @@ public class EditArticle extends HttpServlet {
             ArticleDAOImpl articleDAO = new ArticleDAOImpl();
             
             Article article = articleDAO.getArticlesById(articleId);
-            
+            System.out.println("article: "+ article);
             if (article != null) {
                 request.setAttribute("edit-article", article);
                 request.getRequestDispatcher("views/article/form-edit.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("list-article?page=1");
             }
         } else {
             response.sendRedirect("list-article?page=1");

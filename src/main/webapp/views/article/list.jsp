@@ -15,7 +15,7 @@
     if (uId == null) {
         response.sendRedirect("login");
     }
-    
+
     List<Article> listArticle = (List<Article>) session.getAttribute("listArticle");
 
     int total = (int) request.getAttribute("total");
@@ -23,14 +23,14 @@
     String p = request.getParameter("page");
     int pageNum = 1;
 
-    if (page != null && p.matches("\\d+")) {
+    if (p != null && p.matches("\\d+")) {
         pageNum = Integer.parseInt(p);
     }
 
 %>
 <%@include file="../layouts/header.jsp"%>
 
-<div class="d-flex container justify-content-lg-between mt-3">
+<div class="d-flex container mt-3" style="justify-content: space-between!important;">
     <p class="m-0">Total: <%= total%> articles</p>
     <div class="">
         <a href="form-article" class="btn btn-rounded btn-dark">
@@ -40,7 +40,7 @@
 </div>
 
 
-<div class="container border p-0 mt-3 mb-5" style="min-height: 500px">
+<div class="container border p-0 mt-3 mb-5" style="min-height: 340px; overflow-x: auto;">
     <table class="table align-middle mb-0 bg-white">
         <thead class="table-primary table-bordered">
             <tr>
@@ -65,7 +65,8 @@
                     <p class="fw-normal m-0"><%= article.getDescription()%></p>
                     <!--<p class="text-muted mb-0"></p>-->
                 </td>
-                <td style="width: 400px;"><%= article.getContent() + "..."%></td>
+                <td style="width: 400px;"><%= article.getContent().length() > 100
+                                    ? article.getContent().substring(0, (article.getContent().length()) / 3) + "..." : article.getContent().substring(0, ((article.getContent().length()) * 2) / 3) + "..."%></td>
 
                 <td class="text-primary" style="width: 150px;"><%= article.getAuthor()%></td>
 
@@ -87,7 +88,8 @@
                     <a href="edit-article?articleId=<%= article.getArticle_Id()%>" class="btn btn-link btn-sm btn-rounded" title="Edit">
                         <i class="fa-solid fa-pen"></i>
                     </a>  
-                    <a href="delete-article?articleId=<%= article.getArticle_Id()%>" class="btn btn-link btn-sm btn-rounded" title="Delete">
+                    <a href="delete-article?articleId=<%= article.getArticle_Id()%>" 
+                       onclick="return confirm('Delete this item permanently. Confirm?');" class="btn btn-link btn-sm btn-rounded" title="Delete">
                         <i class="fa-solid fa-trash"></i>
                     </a> 
                 </td>
@@ -95,9 +97,9 @@
 
             <% }%>
 
-
-
-
+            
+            
+            
         </tbody>
     </table>
 </div>
@@ -123,5 +125,5 @@
         </li>
     </ul>
 </nav>
-
+            
 <%@include file="../layouts/footer.jsp" %>

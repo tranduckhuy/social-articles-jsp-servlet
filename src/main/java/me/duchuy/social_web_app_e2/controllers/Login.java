@@ -48,6 +48,7 @@ public class Login extends HttpServlet {
             session.setAttribute("uId", uId);
             response.sendRedirect("list-article?page=1");
         } else {
+            request.setAttribute("error", "Incorrect email or password. Please try again.");
             request.getRequestDispatcher("views/index.jsp").forward(request, response);
         }
         
